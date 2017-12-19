@@ -48,6 +48,8 @@ public class ReimbursementDAO{
 	             rs.next();
 	             eID = Integer.toString(rs.getInt(1));
     		 }
+    		 System.out.println(username);
+    		 System.out.println(seeIfManager(username));
              if(seeIfManager(username)) {
             	 sql = "SELECT * FROM REIMBURSEMENTS";
 	    	 }
@@ -71,15 +73,17 @@ public class ReimbursementDAO{
     	 PreparedStatement ps = null;
          String eID;
          ResultSet rs = null;
+         
          try(Connection conn = dbConnect.getConnection()){
         	 String sql = "SELECT username FROM MANAGERS WHERE username= '"+ username+"'";
         	 ps = conn.prepareStatement(sql);
         	 rs = ps.executeQuery();
-        	 rs.next();
+        	 if(!rs.next()) {
+        		 return false;
+        	 };
          }catch(Exception ex) {
+        	 ex.printStackTrace();
         	 return false;
-        	 
-        	 
          }
          return true;
          
